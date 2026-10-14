@@ -35,8 +35,8 @@ def test_multiline_line_numbers():
     x_token = tokens[3]
     assert x_token.value == "x"
     assert x_token.line_number == 2
-    # "y" is on line 3
-    y_token = tokens[7]
+    # "y" is on line 3 — it is tokens[6] (after: format, Foo, {, x, :, u8).
+    y_token = tokens[6]
     assert y_token.value == "y"
     assert y_token.line_number == 3
 

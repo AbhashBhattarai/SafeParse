@@ -49,8 +49,9 @@ def test_naive_individual_checks():
     source = "format Foo { a: u16 b: u16 }"
     result = compile_spec(source, "naive")
     code = result["c_code"]
-    # Each field gets 2 lines of bounds check, so 4 total PARSE_ERR_TOO_SHORT.
-    check_count = code.count("PARSE_ERR_TOO_SHORT")
+    # Each field gets 2 lines of bounds check, so 4 "return PARSE_ERR_TOO_SHORT".
+    # We count "return PARSE_ERR_TOO_SHORT" to exclude the #define line.
+    check_count = code.count("return PARSE_ERR_TOO_SHORT")
     assert check_count == 4
 
 
@@ -59,8 +60,8 @@ def test_optimized_merged_checks():
     source = "format Foo { a: u16 b: u16 }"
     result = compile_spec(source, "optimized")
     code = result["c_code"]
-    # One merged check: 2 occurrences of PARSE_ERR_TOO_SHORT.
-    check_count = code.count("PARSE_ERR_TOO_SHORT")
+    # One merged check: 2 "return PARSE_ERR_TOO_SHORT" (excludes #define).
+    check_count = code.count("return PARSE_ERR_TOO_SHORT")
     assert check_count == 2
 
 

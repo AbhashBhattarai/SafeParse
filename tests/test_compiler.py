@@ -103,8 +103,8 @@ def test_default_mode_is_naive():
     """Calling compile_spec without a mode should default to naive."""
     result = compile_spec("format Foo { x: u8 }")
     assert result["success"]
-    # Naive mode for a single u8 field should have 2 TOO_SHORT checks.
-    assert result["c_code"].count("PARSE_ERR_TOO_SHORT") == 2
+    # Naive mode for a single u8 field should have 2 "return" TOO_SHORT checks.
+    assert result["c_code"].count("return PARSE_ERR_TOO_SHORT") == 2
 
 
 def test_empty_spec_text():
