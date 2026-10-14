@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}Compile Spec — SafeParse{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>Compile Binary Format Specification</h2>
+    <p>
+        Define a binary packet or file format using the SafeParse specification syntax.
+        When submitted, the compiler will generate both <strong>naive</strong> and <strong>optimized</strong>
+        memory-safe C parsers.
+    </p>
+
+    <!-- Compiler Error Messages -->
+    {% if compiler_errors %}
+        <div class="alert alert-error">
+            <strong>Compilation Failed:</strong> Please fix the following error(s):
+            <ul class="error-list">
+                {% for error in compiler_errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
+    <!-- Compilation Success Notification -->
+    {% if compilation_success %}
+        <div class="alert alert-success">
+            <strong>Success!</strong> Successfully compiled <code>{{ format_name }}</code> and saved the parsers to the database.
+        </div>
+    {% endif %}
+
+    <!-- Spec Input Form -->
+    <form method="POST" action="{{ url_for('compile_page') }}">
+        <div class="form-group">
+            <label for="spec_text">Format Specification</label>
+            <textarea id="spec_text" name="spec_text" class="spec-input" spellcheck="false" required>{{ spec_text }}</textarea>
+        </div>
+
+        <button type="submit" class="btn">Compile Both Variants</button>
+    </form>
+</div>
+
+<!-- Side-by-Side Generated C Code Display -->
+{% if compilation_success %}
+    <div class="code-comparison">
+        <!-- Naive Parser Column -->
+        <div class="code-column">
+            <div class="card">
+                <h3>
+                    Naive Parser
+                    <span class="badge badge-naive">Check Before Every Read</span>
+                </h3>
+                <p style="font-size: 0.85rem; color: #586069;">
+                    Performs an explicit bounds check prior to every individual field read.
+                </p>
+                <pre><code>{{ naive_c_code }}</code></pre>
+            </div>
+        </div>
+
+        <!-- Optimized Parser Column -->
+        <div class="code-column">
+            <div class="card">
+                <h3>
+                    Optimized Parser
+                    <span class="badge badge-opt">Merged Consecutive Checks</span>
+                </h3>
+                <p style="font-size: 0.85rem; color: #586069;">
+                    Combines contiguous fixed-size checks into a single upfront bounds check.
+                </p>
+                <pre><code>{{ opt_c_code }}</code></pre>
+            </div>
+        </div>
+    </div>
+{% endif %}
+{% endblock %}

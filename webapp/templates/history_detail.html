@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}{{ spec.name }} — Specification Details — SafeParse{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+        <h2>{{ spec.name }} (Spec #{{ spec.id }})</h2>
+        <a href="{{ url_for('history') }}" class="btn btn-outline" style="font-size: 0.85rem;">&larr; Back to History</a>
+    </div>
+
+    <p style="color: #586069; font-size: 0.9rem;">
+        Created by <strong>{{ spec.username }}</strong> on {{ spec.created_at }}.
+    </p>
+
+    <h3 style="margin-top: 20px; font-size: 1.05rem;">Specification Source</h3>
+    <pre><code>{{ spec.spec_text }}</code></pre>
+</div>
+
+<div class="code-comparison">
+    <!-- Naive Parser -->
+    <div class="code-column">
+        <div class="card">
+            <h3>
+                Naive Parser
+                <span class="badge badge-naive">Naive Mode</span>
+            </h3>
+            <pre><code>{{ naive_c_code }}</code></pre>
+        </div>
+    </div>
+
+    <!-- Optimized Parser -->
+    <div class="code-column">
+        <div class="card">
+            <h3>
+                Optimized Parser
+                <span class="badge badge-opt">Optimized Mode</span>
+            </h3>
+            <pre><code>{{ opt_c_code }}</code></pre>
+        </div>
+    </div>
+</div>
+{% endblock %}

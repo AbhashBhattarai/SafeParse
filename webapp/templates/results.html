@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}Evaluation Results — SafeParse{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>Evaluation & Benchmark Results</h2>
+    <p>
+        Safety and performance verification metrics recorded from libFuzzer / AFL++ test harnesses
+        and high-iteration parsing benchmark runs.
+    </p>
+
+    {% if test_runs and test_runs|length > 0 %}
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Spec Name</th>
+                        <th>Variant</th>
+                        <th>Fuzz Duration (s)</th>
+                        <th>Crashes Found</th>
+                        <th>Average Speed (ns)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in test_runs %}
+                        <tr>
+                            <td><strong>{{ row.spec_name }}</strong></td>
+                            <td>
+                                {% if row.variant == 'optimized' %}
+                                    <span class="badge badge-opt">optimized</span>
+                                {% else %}
+                                    <span class="badge badge-naive">naive</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ row.fuzz_duration_sec if row.fuzz_duration_sec is not none else "N/A" }}</td>
+                            <td>{{ row.crashes_found if row.crashes_found is not none else "0" }}</td>
+                            <td>{{ "%.2f"|format(row.avg_speed_ns) if row.avg_speed_ns is not none else "N/A" }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <p>No evaluation results recorded yet.</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

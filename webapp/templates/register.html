@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Register — SafeParse{% endblock %}
+
+{% block content %}
+<div class="card auth-card">
+    <h2>Create Developer Account</h2>
+    <p>Sign up to start compiling binary format specifications into memory-safe C parsers.</p>
+
+    <form method="POST" action="{{ url_for('register') }}">
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" required autofocus placeholder="Enter your username">
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required placeholder="Choose a password">
+        </div>
+
+        <button type="submit" class="btn" style="width: 100%;">Create Account</button>
+    </form>
+
+    <div style="margin-top: 20px; text-align: center; font-size: 0.9rem;">
+        Already have an account? <a href="{{ url_for('login') }}">Log in here</a>.
+    </div>
+</div>
+{% endblock %}

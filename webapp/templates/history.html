@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}History — SafeParse{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>Specification History</h2>
+    <p>
+        {% if is_admin %}
+            <strong>Administrator View:</strong> Showing all compiled specifications from all users.
+        {% else %}
+            Showing your previously compiled binary format specifications.
+        {% endif %}
+    </p>
+
+    {% if specs and specs|length > 0 %}
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 80px;">ID</th>
+                        <th>Format Name</th>
+                        {% if is_admin %}
+                            <th>Created By</th>
+                        {% endif %}
+                        <th>Date Compiled</th>
+                        <th style="width: 140px;">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in specs %}
+                        <tr>
+                            <td>#{{ item.id }}</td>
+                            <td><strong>{{ item.name }}</strong></td>
+                            {% if is_admin %}
+                                <td><code>{{ item.username }}</code></td>
+                            {% endif %}
+                            <td>{{ item.created_at }}</td>
+                            <td>
+                                <a href="{{ url_for('history_detail', spec_id=item.id) }}" class="btn btn-outline" style="padding: 4px 10px; font-size: 0.85rem;">
+                                    View Parsers
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <p>No format specifications saved yet.</p>
+            <p><a href="{{ url_for('compile_page') }}" class="btn btn-secondary">Compile your first spec</a></p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}SafeParse{% endblock %} — Memory-Safe C Parser Generator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <!-- Main Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-brand">
+            <a href="{{ url_for('compile_page') if session.get('user_id') else url_for('login') }}">
+                SafeParse
+            </a>
+            <span class="tagline">Memory-Safe C Parser Compiler</span>
+        </div>
+
+        <div class="nav-links">
+            {% if session.get("user_id") %}
+                <a href="{{ url_for('compile_page') }}">Compile</a>
+                <a href="{{ url_for('history') }}">History</a>
+                <a href="{{ url_for('results') }}">Results</a>
+                <span class="nav-user">
+                    {{ session.get("username") }}
+                    <span class="role-badge role-{{ session.get('role', 'developer') }}">
+                        {{ session.get("role", "developer") }}
+                    </span>
+                </span>
+                <a href="{{ url_for('logout') }}">Log Out</a>
+            {% else %}
+                <a href="{{ url_for('login') }}">Log In</a>
+                <a href="{{ url_for('register') }}">Register</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <!-- Content Container -->
+    <div class="container">
+        <!-- Flash messages for status and errors -->
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-info">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </div>
+
+</body>
+</html>
